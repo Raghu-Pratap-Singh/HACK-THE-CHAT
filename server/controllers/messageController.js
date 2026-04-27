@@ -3,6 +3,7 @@ const { new_message_alert } = require("../socket/index");
 const userModel = require("../models/user-model");
 const interactionModel = require("../models/interaction-model");
 const { strength_calculator } = require("../utils/linkStrength");
+const treeModel = require("../models/tree-model");
 async function get_chat(req, res) {
     try {
         const { sender, receiver, before } = req.body;
@@ -189,6 +190,84 @@ async function give(req, res) {
             
             // get strength level
             let ls = strength_calculator(newLast50Avg, newAvg);
+
+            // update tree model of this user
+
+            // first filter all tree arrays, strong, moderate and weak and remove this new opposite user if he or she is in it
+            let admin_tree = await treeModel.findOne({userid : admin._id});
+            let user_tree = await treeModel.findOne({userid : user._id});
+
+            // admin array updates
+            let admin_strong = admin_tree.strong;
+            let admin_moderate = admin_tree.moderate;
+            let admin_weak = admin_tree.weak;
+
+            let up_admin_strong = admin_strong.filter((id)=>{
+                id.toString()!==admin._id.toString();
+            })
+
+            let up_admin_moderate = admin_moderate.filter((id)=>{
+                id.toString()!==admin._id.toString();
+            })
+
+            let up_admin_weak = admin_weak.filter((id)=>{
+                id.toString()!==admin._id.toString();
+            })
+
+            // user array updates
+            let user_strong = user_tree.strong;
+            let user_moderate = user_tree.moderate;
+            let user_weak = user_tree.weak;
+
+            let up_user_strong = user_strong.filter((id)=>{
+                id.toString()!==user._id.toString();
+            })
+
+            let up_user_moderate = user_moderate.filter((id)=>{
+                id.toString()!==user._id.toString();
+            })
+            let up_user_weak = user_weak.filter((id)=>{
+                id.toString()!==user._id.toString();
+            })
+
+            // add according to new score
+            if (ls == 1) {
+                // weak
+                up_admin_weak.push(user._id)
+                up_user_weak.push(admin._id)
+            } else if (ls == 2) {
+                // moderate
+                up_admin_moderate.push(user._id)
+                up_user_moderate.push(admin._id)
+                
+            } else if (ls == 3) {
+                // strong
+                up_admin_strong.push(user._id)
+                up_user_strong.push(admin._id)
+            }
+            
+            await treeModel.updateOne({
+                userid : admin._id
+            }, {
+                strong: up_admin_strong,
+                moderate: up_admin_moderate,
+                weak: up_admin_weak
+            })
+
+
+            await treeModel.updateOne({
+                userid : user._id
+            }, {
+                strong: up_user_strong,
+                moderate: up_user_moderate,
+                weak: up_user_weak
+            })
+
+
+            
+
+
+
             await interactionModel.updateOne(
                 { userA, userB },
                 {

@@ -1,5 +1,6 @@
 const userModel = require("../models/user-model");
 const otpModel = require("../models/temp-otp-model");
+const treeModel = require("../models/tree-model");
 const bcrypt = require('bcrypt');
 const { generateToken } = require('../utils/generateToken');
 const { send_otp } = require("../utils/mailerTool")
@@ -24,7 +25,10 @@ const registerUser = async (req, res) => {
             email,
             password: hash
           });
-
+          let utree = await treeModel.create({
+            userid : user._id,
+            
+          })
           let token = generateToken(user);
           console.log(token)
           res.cookie(`token_${user._id}`, token, { httpOnly: true });
