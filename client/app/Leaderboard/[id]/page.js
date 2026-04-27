@@ -171,6 +171,10 @@ function Leaderboard() {
                 src={`${route}${badge}`}
 
             />
+
+            <button onClick={() => {
+                router.push(`/Tree/${id}`);
+            }} id="tree">TREE</button>
         </div>
 
         <div id="leaders" ref={leadersref}>

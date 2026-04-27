@@ -2282,6 +2282,12 @@ RECEIVER (LEFT)
 
 }
 
+@media (max-width:500px) {
+  #leaderboard_nav {
+    font-size: 13px;
+  }
+}
+
 #leaderboard_nav h1:hover {
   cursor: pointer;
 }
@@ -2320,12 +2326,15 @@ RECEIVER (LEFT)
 }
 
 @media (min-width: 700px) {
+  #tree {
+    transition-duration: 0.2s;
+  }
   #profile_backer {
     transition-duration: 0.2s;
 
   }
 
-  #profile_backer:hover {
+  #profile_backer:hover, #tree:hover {
     transform: translateY(-2px);
     color: #00ff00;
   }

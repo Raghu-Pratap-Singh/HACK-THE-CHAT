@@ -1,7 +1,8 @@
 const messageModel = require("../models/message-model");
 const { new_message_alert } = require("../socket/index");
 const userModel = require("../models/user-model");
-
+const interactionModel = require("../models/interaction-model");
+const { strength_calculator } = require("../utils/linkStrength");
 async function get_chat(req, res) {
     try {
         const { sender, receiver, before } = req.body;
@@ -83,6 +84,18 @@ async function give(req, res) {
             return res.status(404).json({ error: "sender not found" });
 
         }
+        // get last message 
+        const lastMessage = await messageModel.findOne({
+            $or: [
+                { sender: admin._id, receiver: user._id },
+                { sender: user._id, receiver: admin._id }
+            ]
+        }).sort({ createdAt: -1 });
+
+        let isReply = false;
+        if (lastMessage && lastMessage.sender.toString() !== admin._id.toString()) {
+            isReply = true;
+        }
 
         // put in message model
         let message = await messageModel.create({
@@ -93,13 +106,13 @@ async function give(req, res) {
         })
 
         await userModel.findByIdAndUpdate(admin._id, {
-            $inc: { totalMessages: 1}
+            $inc: { totalMessages: 1 }
         });
         await userModel.findByIdAndUpdate(user._id, {
-            $inc: {gotMessages : 1}
+            $inc: { gotMessages: 1 }
         });
 
-        
+
         let object1 = {
             time: message.createdAt,
             isAdmin: true,
@@ -110,6 +123,93 @@ async function give(req, res) {
             isAdmin: false,
             text: message.text_content
         }
+
+        // get last message between this pair
+        let [userA, userB] = [admin._id.toString(), user._id.toString()].sort();
+
+        const interaction = await interactionModel.findOne({
+            userA,
+            userB
+        });
+        // if this is first message, (no entry exists case)
+        let currInteraction = interaction;
+
+        if (!currInteraction) {
+            currInteraction = await interactionModel.create({
+                userA,
+                userB,
+                lastMessageAt: Date.now(),
+            });
+        } else {
+            await interactionModel.updateOne(
+                { userA, userB },
+                { $set: { lastMessageAt: Date.now() } }
+            );
+            currInteraction = await interactionModel.findOne({
+                userA, 
+                userB
+            });
+        }
+        
+        // if reply happened
+        if (isReply && lastMessage) {
+
+            const replyTime = Date.now() - new Date(lastMessage.createdAt).getTime();
+
+            // get current values
+            let curr = currInteraction || {
+                replyCount: 0,
+                avgReplyTime: 0,
+                recentReplyTimes: []
+            };
+            
+            
+            let newReplyCount = curr.replyCount + 1;
+            
+            let newAvg =
+            curr.avgReplyTime +
+            (replyTime - curr.avgReplyTime) / newReplyCount;
+            
+            
+            let arr = [...(curr.recentReplyTimes || [])];
+            
+            arr.push(replyTime);
+            
+            if (arr.length > 50) {
+                arr.shift();
+            }
+            
+            // compute exact avg
+            let sum = 0;
+            for (let i = 0; i < arr.length; i++) {
+                sum += arr[i];
+            }
+            
+            let newLast50Avg = arr.length > 0 ? sum / arr.length : 0;
+            
+            // get strength level
+            let ls = strength_calculator(newLast50Avg, newAvg);
+            await interactionModel.updateOne(
+                { userA, userB },
+                {
+                    $set: {
+                        lastInteractionAt: Date.now(),
+                        avgReplyTime: newAvg,
+                        last50AvgReplyTime: newLast50Avg,
+                        recentReplyTimes: arr,
+                        linkstrength: ls
+                    },
+                    $inc: {
+                        replyCount: 1
+                    }
+                }
+            );
+
+            console.log(`reply : ${replyTime}`);
+
+        }
+
+
         // give live notification to sender's sockets and receiver's sockets
         new_message_alert(admin._id, object1);
         let response = new_message_alert(user._id, object2);
@@ -117,7 +217,7 @@ async function give(req, res) {
         if (response === -1) {
             // means receiver is not online
             await userModel.findByIdAndUpdate(user._id, {
-                $addToSet : {pending : admin.username}
+                $addToSet: { pending: admin.username }
             })
             console.log(`${admin.username} added to pending`)
         }
