@@ -84,6 +84,11 @@ function Tree() {
 
       </div>
 
+    <div id="connections">
+      <div className="link"></div>
+      <div className="link"></div>
+      <div className="link"></div>
+    </div>
       
     </>
   )
