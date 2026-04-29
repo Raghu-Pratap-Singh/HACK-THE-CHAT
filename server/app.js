@@ -10,6 +10,7 @@ const cors = require("cors");
 const usersRouter = require("./routes/usersRouter");
 const messageRouter = require("./routes/messageRouter");
 const levelRouter = require("./routes/levelRouter");
+const treeRouter = require("./routes/treeRouter");
 const db = require("./config/mongoose-connection");
 const client_port = process.env.CLIENT_PORT
 
@@ -32,6 +33,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/users", usersRouter);
 app.use("/messages", messageRouter);
 app.use("/LOG", levelRouter);
+app.use("/tree", treeRouter);
 
 // Create HTTP Server
 

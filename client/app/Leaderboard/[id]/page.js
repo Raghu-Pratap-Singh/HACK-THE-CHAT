@@ -40,7 +40,7 @@ function Leaderboard() {
 
 
         const send_badge_request = async () => {
-            console.log("id:", id);
+            
 
             try {
                 let res = await fetch(`${logroute}/getlog/${id}`, {
