@@ -15,7 +15,7 @@ function Tree() {
   let [strong_links, setStrong] = useState([]);
   let [moderate_links, setModerate] = useState([]);
   let [weak_links, setWeak] = useState([]);
-
+  let link_ref = useRef();
   let welcomeref = useRef();
   let treeroute = process.env.NEXT_PUBLIC_TREEROUTE;
   useEffect(() => {
@@ -73,6 +73,16 @@ function Tree() {
 
 
   }, [])
+
+  useEffect(()=>{
+    if (link_ref.current) {
+      gsap.to(link_ref.current, {
+        delay:4, 
+        duration:0.7,
+        opacity:1,
+      })
+    }
+  }, [])
   return (
     <>
       <Back />
@@ -84,10 +94,24 @@ function Tree() {
 
       </div>
 
-    <div id="connections">
-      <div className="link"></div>
-      <div className="link"></div>
-      <div className="link"></div>
+    <div id="connections" ref={link_ref}>
+      <div className="link">
+        <h1>STRONG LINKS
+          <div className="link_dot"></div>
+        </h1>
+      </div>
+      <div className="link">
+        <h1>MODERATE LINKS
+
+          <div className="link_dot"></div>
+        </h1>
+      </div>
+      <div className="link">
+        <h1>WEAK LINKS
+
+          <div className="link_dot"></div>
+        </h1>
+      </div>
     </div>
       
     </>

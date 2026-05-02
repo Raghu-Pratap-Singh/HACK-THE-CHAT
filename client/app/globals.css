@@ -2740,6 +2740,7 @@ RECEIVER (LEFT)
   align-items: center;
   justify-content: space-evenly;
   gap: 20px;
+  opacity: 0;
 }
 
 .link {
@@ -2748,4 +2749,44 @@ RECEIVER (LEFT)
   height: 90vh;
   position: relative;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+}
+
+.link h1 {
+  font-family: monospace;
+  font-size: 30px;
+  font-weight: 700;
+  word-spacing: 2px;
+  width: 100%;
+  position: relative;
+  text-align: center;
+  /* background-color: #00ff00; */
+}
+
+.link_dot {
+  position: absolute;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #00ff00;
+  border-width: 2px;
+  margin-top: 13px;
+  border-style: solid;
+  border-color: #ffffff;
+  margin-left: 10px;
+  box-shadow: inset -4px -5px 5px rgb(27, 27, 27, 0.7);
+  
+}
+
+.link:nth-child(1) .link_dot {
+  background-color: rgb(9, 255, 0);
+}
+.link:nth-child(2) .link_dot {
+  background-color: rgb(255, 221, 0);
+}
+.link:nth-child(3) .link_dot {
+  background-color: rgb(255, 0, 0);
 }
