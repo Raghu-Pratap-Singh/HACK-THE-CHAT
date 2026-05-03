@@ -2737,7 +2737,7 @@ RECEIVER (LEFT)
   padding: 20px;
   /* background-color: #00ff00; */
   flex-direction: row;
-  align-items: center;
+  align-items: start;
   justify-content: space-evenly;
   gap: 20px;
   opacity: 0;
@@ -2746,7 +2746,8 @@ RECEIVER (LEFT)
 .link {
   user-select: none;
   flex-grow: 1;
-  height: 90vh;
+  height: fit-content;
+  padding-bottom: 20px;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -2789,4 +2790,51 @@ RECEIVER (LEFT)
 }
 .link:nth-child(3) .link_dot {
   background-color: rgb(255, 0, 0);
+}
+
+
+.link_name {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 25px;
+  font-family: "Courier New", monospace;
+  font-weight: 500;
+}
+.branch {
+  display: inline-block;
+  width: 7px;
+  height: 60px;
+  background-color: #62ff43f8;
+  border-radius: 7px;
+  border-width: 1.5px;
+  border-color: white;
+  box-shadow: inset 0px -10px 6px rgb(0, 138, 28, 0.8);
+}
+.branchm {
+  display: inline-block;
+  width: 7px;
+  height: 60px;
+  background-color: #fffc3bf8;
+  border-radius: 7px;
+  border-width: 1.5px;
+  border-color: white;
+  box-shadow: inset 0px -10px 6px rgba(150, 147, 0, 0.8);
+}
+.branchw {
+  display: inline-block;
+  width: 7px;
+  height: 60px;
+  background-color: #ff0000f8;
+  border-radius: 7px;
+  border-width: 1.5px;
+  border-color: white;
+  box-shadow: inset 0px -10px 6px rgba(96, 0, 0, 0.8);
+}
+
+@media (max-width: 800px) {
+  #connections {
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+  }
 }

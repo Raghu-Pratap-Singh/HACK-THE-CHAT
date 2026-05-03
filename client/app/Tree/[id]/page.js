@@ -31,6 +31,7 @@ function Tree() {
         let data = await res.json();
 
         if (data.ok) {
+          
           setStrong(data.strong);
           setModerate(data.moderate);
           setWeak(data.weak);
@@ -74,12 +75,12 @@ function Tree() {
 
   }, [])
 
-  useEffect(()=>{
+  useEffect(() => {
     if (link_ref.current) {
       gsap.to(link_ref.current, {
-        delay:4, 
-        duration:0.7,
-        opacity:1,
+        delay: 4,
+        duration: 0.7,
+        opacity: 1,
       })
     }
   }, [])
@@ -94,26 +95,62 @@ function Tree() {
 
       </div>
 
-    <div id="connections" ref={link_ref}>
-      <div className="link">
-        <h1>STRONG LINKS
-          <div className="link_dot"></div>
-        </h1>
-      </div>
-      <div className="link">
-        <h1>MODERATE LINKS
+      <div id="connections" ref={link_ref}>
+        <div className="link">
+          <h1>STRONG LINKS
+            <div className="link_dot"></div>
+          </h1>
+          {/* <div className="branch"></div>
+        <div className="link_name">Raghu</div>
+        <div className="branch"></div>
+        <div className="link_name">Raghu</div>
+        <div className="branch"></div>
+        <div className="link_name">Raghu</div> */}
+        {strong_links.map((user, index) => (
+          <React.Fragment key={index}>
+            <div className="branchw"></div>
+            <div className="link_name">{user}</div>
+          </React.Fragment>
+        ))}
+        </div>
+        <div className="link">
+          <h1>MODERATE LINKS
 
-          <div className="link_dot"></div>
-        </h1>
-      </div>
-      <div className="link">
-        <h1>WEAK LINKS
+            <div className="link_dot"></div>
+          </h1>
+          {/* <div className="branchm"></div>
+        <div className="link_name">Raghu</div>
+        <div className="branchm"></div>
+        <div className="link_name">Raghu</div>
+        <div className="branchm"></div>
+        <div className="link_name">Raghu</div> */}
+        {moderate_links.map((user, index) => (
+          <React.Fragment key={index}>
+            <div className="branchw"></div>
+            <div className="link_name">{user}</div>
+          </React.Fragment>
+        ))}
+        </div>
+        <div className="link">
+          <h1>WEAK LINKS
 
-          <div className="link_dot"></div>
-        </h1>
+            <div className="link_dot"></div>
+          </h1>
+          {/* <div className="branchw"></div>
+        <div className="link_name">Raghu</div>
+        <div className="branchw"></div>
+        <div className="link_name">Raghu</div>
+        <div className="branchw"></div>
+        <div className="link_name">Raghu</div> */}
+        {weak_links.map((user, index) => (
+          <React.Fragment key={index}>
+            <div className="branchw"></div>
+            <div className="link_name">{user}</div>
+          </React.Fragment>
+        ))}
+        </div>
       </div>
-    </div>
-      
+
     </>
   )
 }
