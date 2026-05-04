@@ -2838,3 +2838,20 @@ RECEIVER (LEFT)
     gap: 30px;
   }
 }
+
+.link_name {
+  border-width: 2px;
+  padding: 10px;
+  padding-left: 16px;
+  padding-right: 16px;
+  border-radius: 20px;
+  transition-duration: 0.2s;
+  
+ box-shadow: inset 0px 0px 18px rgb(255, 255, 255, 0.6); 
+ background-color: rgba(98, 98, 98, 0.2);
+}
+
+.link_name:hover {
+  
+  scale: 1.1;
+}
