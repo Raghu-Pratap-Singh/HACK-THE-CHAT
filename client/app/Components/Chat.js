@@ -61,6 +61,8 @@ function Chat({ adminid }) {
             });
 
         }
+
+
         socket.on("remove_update", handler);
         socket.on("new_message", new_message_handler);
         socket.on("update_pending_removal", read_done_update);
@@ -512,6 +514,15 @@ function Chat({ adminid }) {
         }
     }
 
+    
+    async function direct(username) {
+        socket.emit("direct_chat", {
+            adminid : adminid,
+            username: username
+        })
+    }
+
+
     return (
         <>
             {nullname && <div id="nullify_confirmation">
@@ -571,6 +582,8 @@ function Chat({ adminid }) {
                                                 trans(true);
                                                 handle_read(user.username)
 
+                                                direct(user.username)
+                                                
                                             }}>init link</div>
 
                                             <div className="mob_chat_with_friend" onClick={() => {
@@ -581,14 +594,15 @@ function Chat({ adminid }) {
                                                 setMode(true);
                                                 trans(true);
                                                 handle_read(user.username)
+                                                direct(user.username)
                                             }}></div>
                                             <div className="null" onClick={() => {
                                                 setNullname(user.username);
-
+                                                
                                             }}>nullify</div>
                                             <div className="mob_null" onClick={() => {
                                                 setNullname(user.username);
-
+                                                
                                             }}></div>
                                         </div>
                                     </div>
@@ -607,6 +621,7 @@ function Chat({ adminid }) {
                                                 setMode(true);
                                                 trans(true);
                                                 handle_read(user.username)
+                                                direct(user.username)
                                             }}>init link</div>
                                             <div className="mob_chat_with_friend" onClick={() => {
                                                 setChatUser(user.username);
@@ -616,6 +631,7 @@ function Chat({ adminid }) {
                                                 setMode(true);
                                                 trans(true);
                                                 handle_read(user.username)
+                                                direct(user.username)
                                             }}></div>
                                             <div className="null" onClick={() => {
                                                 setNullname(user.username);

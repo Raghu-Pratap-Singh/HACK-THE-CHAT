@@ -14,7 +14,7 @@ let usernameToId = new Map();
 const sessionStart = new Map(); // userId → timestamp
 const client_port = process.env.CLIENT_PORT
 
-
+const directed_chat = new Map();
 
 function initSocket(server) {
 
@@ -156,6 +156,15 @@ function initSocket(server) {
             } catch (err) {
                 console.error(err)
             }
+        })
+
+        socket.on("direct_chat", async (data)=>{
+            let adminname = online_users_names.get(data.adminid.toString());
+            let username = data.username;
+            
+            directed_chat.set(adminname, username);
+            console.log(directed_chat);
+            
         })
 
     })
