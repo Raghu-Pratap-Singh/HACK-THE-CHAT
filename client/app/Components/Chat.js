@@ -54,25 +54,38 @@ function Chat({ adminid }) {
 
         const read_done_update = (data) => {
             let username = data.username;
+            if (username!=chat_user) {
+
+                setPendingusers(prev => {
+                    const updated = new Set(prev); // copy the set
+                    updated.delete(username);      // remove the username
+                    return updated;               // return new set
+                });
+            }
+
+        }
+
+        const new_pending_user_handler = (username) => {
             setPendingusers(prev => {
                 const updated = new Set(prev); // copy the set
-                updated.delete(username);      // remove the value
+                updated.add(username);      // add new username to pending list
                 return updated;               // return new set
             });
-
         }
 
 
         socket.on("remove_update", handler);
         socket.on("new_message", new_message_handler);
         socket.on("update_pending_removal", read_done_update);
-
-
+        socket.on("new_live_user", new_pending_user_handler);
+        
+        
         return () => {
             socket.off("remove_update", handler);
             socket.off("new_message", new_message_handler);
             socket.off("update_pending_removal", read_done_update);
-
+            socket.off("new_live_user", new_pending_user_handler);
+            
         }
 
     }, [])
@@ -522,7 +535,9 @@ function Chat({ adminid }) {
         })
     }
 
-
+    function cut_direct_link() {
+        socket.emit("cut_link", adminid);
+    }
     return (
         <>
             {nullname && <div id="nullify_confirmation">
@@ -686,7 +701,8 @@ function Chat({ adminid }) {
 
                         setMode(false);
                         trans(false);
-
+                        
+                        cut_direct_link();
                     }}>terminate link</div>}
                     <div id="cross_chat" onScroll={handle_scroll}>
                         {chat_user && messagelist.map((msg, index) => (

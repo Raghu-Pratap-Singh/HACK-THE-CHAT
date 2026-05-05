@@ -1,5 +1,5 @@
 const messageModel = require("../models/message-model");
-const { new_message_alert } = require("../socket/index");
+const { new_message_alert, live_pending_user_update } = require("../socket/index");
 const userModel = require("../models/user-model");
 const interactionModel = require("../models/interaction-model");
 const { strength_calculator } = require("../utils/linkStrength");
@@ -290,8 +290,8 @@ async function give(req, res) {
 
 
         // give live notification to sender's sockets and receiver's sockets
-        new_message_alert(admin._id, object1);
-        let response = new_message_alert(user._id, object2);
+        new_message_alert(user.username, admin._id, object1);
+        let response = new_message_alert(admin.username, user._id, object2);
 
         if (response === -1) {
             // means receiver is not online
@@ -299,6 +299,10 @@ async function give(req, res) {
                 $addToSet: { pending: admin.username }
             })
             console.log(`${admin.username} added to pending`)
+        } else if (response === 2) {
+            // means opposite user is online but is not currently chatting with admin, so use function in socket to send update to all opposite user's sockets to add admins name to their pending_users's list
+            live_pending_user_update(admin.username, user._id);
+            console.log("sent ......")
         }
 
         return res.status(200).json({ ok: true });

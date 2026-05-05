@@ -167,6 +167,10 @@ function initSocket(server) {
             
         })
 
+        socket.on("cut_link", (adminid)=>{
+            let adminname = online_users_names.get(adminid.toString());
+            directed_chat.delete(adminname);
+        })
     })
 
 
@@ -246,22 +250,33 @@ function remove_friend_from_all_sockets(adminid, friendname) {
 
 }
 
-function new_message_alert(userid, message_object) {
+function new_message_alert(adminname, userid, message_object) {
 
     userid = userid.toString();
-
+    
 
     if (!online_users.has(userid)) {
 
         return -1;
     }
+
     let target_sockets = usersocket.get(userid);
     io.to(target_sockets).emit("new_message", message_object);
+    console.log("running")
+    console.log(adminname, ",",online_users_names.get(userid.toString()));
+    let username = online_users_names.get(userid.toString());
+    if ((directed_chat.has(username) && directed_chat.get(username)!=adminname) || (online_users.has(userid.toString()) && !directed_chat.has(username))) {
+        return 2;
+    }
     return 1;
 
 }
 
+function live_pending_user_update(adminname,userid) {
+    let target_sockets = usersocket.get(userid.toString());
+    io.to(target_sockets).emit("new_live_user", adminname);
+}
 
 // online status emitting function which will tell a user which of his/her friends are online
 
-module.exports = { initSocket, getio, send_new_friend_request_notification, decline_update_to_all_self_sockets, accept_update_to_all_self_sockets, remove_friend_from_all_sockets, new_message_alert };
+module.exports = { initSocket, getio, send_new_friend_request_notification, decline_update_to_all_self_sockets, accept_update_to_all_self_sockets, remove_friend_from_all_sockets, new_message_alert, live_pending_user_update };
