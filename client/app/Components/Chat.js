@@ -75,7 +75,9 @@ function Chat({ adminid }) {
                     return updated;               // return new set
                 });
             
-            // shine animation here only as just new notification occured
+
+
+                
             if (f_ref.current) {
                 console.log("performing..")
                 let t = gsap.timeline();
