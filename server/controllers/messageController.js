@@ -301,6 +301,10 @@ async function give(req, res) {
             console.log(`${admin.username} added to pending`)
         } else if (response === 2) {
             // means opposite user is online but is not currently chatting with admin, so use function in socket to send update to all opposite user's sockets to add admins name to their pending_users's list
+            await userModel.findByIdAndUpdate(user._id, {
+                $addToSet: { pending: admin.username }
+            })
+            console.log(`${admin.username} added to pending`)
             live_pending_user_update(admin.username, user._id);
             console.log("sent ......")
         }
