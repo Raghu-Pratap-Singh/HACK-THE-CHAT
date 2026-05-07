@@ -31,7 +31,7 @@ function Chat({ adminid }) {
     let [istyping, setIstyping] = useState(false);
     const oldestTimeRef = useRef(null);
     let [pending_users, setPendingusers] = useState(new Set())
-
+    let f_ref = useRef();
 
     let route = process.env.NEXT_PUBLIC_HOMEROUTE
 
@@ -54,23 +54,42 @@ function Chat({ adminid }) {
 
         const read_done_update = (data) => {
             let username = data.username;
-            if (username!=chat_user) {
+            if (username != chat_user) {
 
                 setPendingusers(prev => {
                     const updated = new Set(prev); // copy the set
                     updated.delete(username);      // remove the username
                     return updated;               // return new set
                 });
+
             }
 
         }
 
-        const new_pending_user_handler = (username) => {
-            setPendingusers(prev => {
-                const updated = new Set(prev); // copy the set
-                updated.add(username);      // add new username to pending list
-                return updated;               // return new set
-            });
+        function new_pending_user_handler  (username)  {
+            
+
+                setPendingusers(prev => {
+                    const updated = new Set(prev); // copy the set
+                    updated.add(username);      // add new username to pending list
+                    return updated;               // return new set
+                });
+            
+            // shine animation here only as just new notification occured
+            if (f_ref.current) {
+                console.log("performing..")
+                let t = gsap.timeline();
+                t.to(f_ref.current, {
+                    background:"linear-gradient(180deg,rgba(0, 255, 100, 0.5),rgba(0, 0, 0, 0.7))",
+                    duration: 0.1,
+                    
+                });
+
+                t.to(f_ref.current, {
+                    background:"linear-gradient(180deg,rgba(0, 255, 100, 0.06),rgba(0, 0, 0, 0.75))",
+                    duration: 0.1
+                });
+            }
         }
 
 
@@ -78,14 +97,14 @@ function Chat({ adminid }) {
         socket.on("new_message", new_message_handler);
         socket.on("update_pending_removal", read_done_update);
         socket.on("new_live_user", new_pending_user_handler);
-        
-        
+
+
         return () => {
             socket.off("remove_update", handler);
             socket.off("new_message", new_message_handler);
             socket.off("update_pending_removal", read_done_update);
             socket.off("new_live_user", new_pending_user_handler);
-            
+
         }
 
     }, [])
@@ -527,10 +546,10 @@ function Chat({ adminid }) {
         }
     }
 
-    
+
     async function direct(username) {
         socket.emit("direct_chat", {
-            adminid : adminid,
+            adminid: adminid,
             username: username
         })
     }
@@ -575,7 +594,7 @@ function Chat({ adminid }) {
                             setEntry(e.target.value);
                         }}></input>
 
-                        <div id="friends_list">
+                        <div id="friends_list" ref={f_ref}>
 
 
 
@@ -598,7 +617,7 @@ function Chat({ adminid }) {
                                                 handle_read(user.username)
 
                                                 direct(user.username)
-                                                
+
                                             }}>init link</div>
 
                                             <div className="mob_chat_with_friend" onClick={() => {
@@ -613,11 +632,11 @@ function Chat({ adminid }) {
                                             }}></div>
                                             <div className="null" onClick={() => {
                                                 setNullname(user.username);
-                                                
+
                                             }}>nullify</div>
                                             <div className="mob_null" onClick={() => {
                                                 setNullname(user.username);
-                                                
+
                                             }}></div>
                                         </div>
                                     </div>
@@ -701,7 +720,7 @@ function Chat({ adminid }) {
 
                         setMode(false);
                         trans(false);
-                        
+
                         cut_direct_link();
                     }}>terminate link</div>}
                     <div id="cross_chat" onScroll={handle_scroll}>
