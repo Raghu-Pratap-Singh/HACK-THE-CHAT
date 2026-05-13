@@ -82,14 +82,14 @@ function Chat({ adminid }) {
                 console.log("performing..")
                 let t = gsap.timeline();
                 t.to(f_ref.current, {
-                    background:"linear-gradient(180deg,rgba(0, 255, 100, 0.5),rgba(0, 0, 0, 0.7))",
-                    duration: 0.1,
+                    background:"linear-gradient(0deg,rgba(0, 255, 100, 0.5),rgba(0, 0, 0, 0.75))",
+                    duration: 1,
                     
                 });
 
                 t.to(f_ref.current, {
                     background:"linear-gradient(180deg,rgba(0, 255, 100, 0.06),rgba(0, 0, 0, 0.75))",
-                    duration: 0.1
+                    duration: 1
                 });
             }
         }
