@@ -21,6 +21,7 @@ const isLoggedIn = async (req, res, next) => {
     }
 
     req.user = person;
+    
     next();
   } catch (err) {
     return res.status(401).json({ error: "Invalid or expired token" });

@@ -22,6 +22,9 @@ router.post("/remove_friend", isLoggedIn, remove_friend);
 router.get("/me", isLoggedIn, (req, res) => {
   res.status(200).json({ user: req.user });
 });
-
+router.get("/already_logged_in", isLoggedIn, (req,res)=>{
+  
+  return res.status(200).json({ok:true, user_id:req.user._id.toString()});
+})
 
 module.exports = router
