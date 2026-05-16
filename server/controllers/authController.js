@@ -31,7 +31,12 @@ const registerUser = async (req, res) => {
           })
           let token = generateToken(user);
           console.log(token)
-          res.cookie(`token_${user._id}`, token, { httpOnly: true });
+          res.cookie(`token_${user._id}`, token, { 
+            httpOnly: true,
+            maxAge: 15 * 24 * 60 * 60 * 1000,
+            secure:true,
+            sameSite: "strict"
+            });
           return res.json({ ok: true , userid: user._id});
         }
       });
