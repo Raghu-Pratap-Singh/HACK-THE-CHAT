@@ -2,11 +2,13 @@
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import ScrollTrigger from "gsap/ScrollTrigger";
-import React, { useEffect, useRef } from "react"
+import React, { useEffect, useRef, useContext } from "react"
 import Link from "next/link"
 import Back from "../Components/Back";
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 import { useRouter } from "next/navigation";
+import Error from "@/app/Components/Error";
+import { Context } from '@/app/ContextAPI/Tools';
 
 function Login() {
   const router = useRouter();
@@ -14,7 +16,7 @@ function Login() {
   const route = process.env.NEXT_PUBLIC_HOMEROUTE;
   let welcomeref = useRef();
   let loginref = useRef();
-
+  let { error_text, setErrorText, is_error, setIsError } = useContext(Context);
   useEffect(() => {
 
     if (welcomeref.current) {
@@ -64,12 +66,14 @@ function Login() {
       console.log(data.userid)
       router.push(`/Profile/${data.userid}`);
     } else {
-      alert("Login failed");
+      setErrorText("Login Failed");
+      setIsError(true);
     }
   };
 
   return (
     <>
+      {is_error && <Error/>}
       <Back />
       <div id="welcome" ref={welcomeref}>
         <h2>L</h2>

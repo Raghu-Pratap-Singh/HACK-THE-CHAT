@@ -2,14 +2,15 @@
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import ScrollTrigger from "gsap/ScrollTrigger";
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef, useState , useContext} from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation";
 import Back from "../Components/Back";
-
+import Error from "@/app/Components/Error";
+import { Context } from '@/app/ContextAPI/Tools';
 gsap.registerPlugin(useGSAP, ScrollTrigger);
-
 function Create() {
+  let { error_text, setErrorText, is_error, setIsError } = useContext(Context);
   let welcomeref = useRef();
   let loginref = useRef();
   const router = useRouter();
@@ -18,6 +19,7 @@ function Create() {
   let [username, setUsername] = useState("");
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
+
   const route = process.env.NEXT_PUBLIC_HOMEROUTE;
   useEffect(() => {
     if (welcomeref.current) {
@@ -54,13 +56,15 @@ function Create() {
       const email_1 = form.new_email.value;
       setEmail(email_1);
       if (!username || !email_1 || !password) {
-        alert("All fields are required");
+        setErrorText("All fields are required");
+        setIsError(true);
         return;
       }
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
       if (!emailRegex.test(email_1)) {
-        alert("Please enter a valid email address");
+        setErrorText("Please enter a valid email address");
+        setIsError(true);
         return;
       }
 
@@ -79,14 +83,17 @@ function Create() {
         return;
 
       } else {
-        alert(data.error)
+        setErrorText(`${data.error}`);
+        setIsError(true);
+
         setEmail("");
         setPassword("");
         setUsername("");
         setIsotp(0)
       }
     } catch (err) {
-      alert("Server error")
+      setErrorText("Server error");
+      setIsError(true);
       setEmail("");
       setPassword("");
       setUsername("");
@@ -96,7 +103,8 @@ function Create() {
   async function check(e) {
     try {
       if (!otp) {
-        alert("enter OTP");
+        setErrorText("Enter OTP");
+        setIsError(true);
         return;
       }
       let match_req = await fetch(`${route}/users/matchotp`, {
@@ -125,19 +133,22 @@ function Create() {
           setIsotp(0)
           setOtp("");
         } else {
-          alert(res_data.error);
+          setErrorText(`${res_data.error}`);
+          setIsError(true);
           
           setIsotp(0)
           setOtp("");
         }
       } else {
-        alert(data.error)
+        setErrorText(`${data.error}`);
+        setIsError(true);
         
         setIsotp(0)
         setOtp("");
       }
     } catch (err) {
-      alert("some error occured")
+      setErrorText("Some error occured");
+      setIsError(true);
 
       setEmail("");
       setPassword("");
@@ -150,6 +161,7 @@ function Create() {
 
   return (
     <>
+      {is_error && <Error/>}
       <Back />
       <div id="welcome" ref={welcomeref}>
         <h2>C</h2>

@@ -2,17 +2,19 @@
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import ScrollTrigger from "gsap/ScrollTrigger";
-import React, { useEffect, useRef } from "react"
+import React, { useEffect, useRef, useContext } from "react"
 import Link from "next/link"
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 import { useRouter } from "next/navigation";
-
+import Error from "@/app/Components/Error";
 import Back from "./Components/Back";
+import { Context } from '@/app/ContextAPI/Tools';
 function Page() {
   const router = useRouter();
   let user_route = process.env.NEXT_PUBLIC_USERROUTE;
   let welcomeref = useRef();
   let introref = useRef();
+  let { error_text, setErrorText, is_error, setIsError } = useContext(Context);
 
 
   // on component mount, change the gradient after a delay of 1 sec
@@ -83,7 +85,7 @@ function Page() {
 
   }, [])
   return (<>
-
+    {is_error && <Error/>}
     <div id="welcome" ref={welcomeref}>
       <h2>W</h2>
       <h2>E</h2>

@@ -2855,3 +2855,85 @@ RECEIVER (LEFT)
   
   scale: 1.1;
 }
+
+/* ERROR SCREEN CSS */
+#error_cover {
+  position: fixed;
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  backdrop-filter: blur(10px);
+  z-index: 5;
+}
+
+#error_message {
+  position: relative;
+  padding: 13px;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+  border-radius: 8px;
+  background-color: #ffbcbc;
+  height: fit-content;
+  border-width: 2.3px;
+  border-style: solid;
+  border-color: rgba(255, 0, 0, 0.8);
+  box-shadow: inset 0px 0px 3px red;
+  user-select: none;
+}
+
+#error_message h1 {
+  user-select: none;
+  width: 100%;
+  text-align: center;
+  color: red;
+  font-size: 25px;
+  font-family: "Courier New", monospace;
+  font-weight: 900;
+}
+
+#error_message p {
+  color: red;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+#error_move_on {
+  color: white;
+  background-color: red;
+  padding: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-top: 10px;
+  font-size: 17px;
+  border-radius: 10px;
+  user-select: none;
+}
+@media (min-width: 610px) {
+  #error_move_on {
+    transition-duration: 0.2s;
+  }
+  #error_move_on:hover {
+    transform: translateY(-3px);
+    background-color: rgb(201, 0, 0);
+  }
+}
+@media (max-width: 610px) {
+  #error_message {
+    width: 260px;
+  }
+  #error_message h1 {
+    font-size: 16px;
+  }
+  #error_message p {
+    font-size: 14px;
+  }
+  #error_move_on {
+    font-size: 12px;
+  }
+}
