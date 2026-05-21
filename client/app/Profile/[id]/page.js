@@ -7,6 +7,7 @@ import Link from "next/link"
 import Back from "../../Components/Back";
 import Nav from "@/app/Components/Nav";
 import Chat from "@/app/Components/Chat";
+import Error from "@/app/Components/Error";
 import { useParams } from "next/navigation";
 import { Context } from '@/app/ContextAPI/Tools';
 
@@ -19,7 +20,7 @@ gsap.registerPlugin(useGSAP, ScrollTrigger);
 function Profile() {
   const { id } = useParams();
   let welcomeref = useRef();
-  let { list, setList, online, setOnline } = useContext(Context);
+  let { list, setList, online, setOnline, is_error} = useContext(Context);
   const router = useRouter();
 
 
@@ -110,6 +111,7 @@ function Profile() {
 
   return (
     <>
+      {is_error && <Error/>}
       <Back />
       <Nav adminid={id} />
       <div id="welcome" ref={welcomeref}>

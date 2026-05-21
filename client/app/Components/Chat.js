@@ -13,7 +13,7 @@ function Chat({ adminid }) {
     const [searchedUsers, setSearchedUsers] = useState([]);
     let [entry, setEntry] = useState("");
     let [e2, setE2] = useState("");
-    let { list, setList, online, setOnline } = useContext(Context);
+    let { list, setList, online, setOnline, is_error, setIsError, error_text, setErrorText} = useContext(Context);
     let chatref = useRef();
     let displayref = useRef();
     let [nullname, setNullname] = useState("");
@@ -155,11 +155,13 @@ function Chat({ adminid }) {
                     setPendingusers(new Set(data.pending_arr));
                 }
                 else {
-                    alert(data.error || "Some error occurred");
+                    setErrorText(`${data.error}` || "Some error occurred");
+                    setIsError(true);
                 }
             } catch (err) {
-                console.error(err);
-                alert("server error..");
+                // console.error(err);
+                setErrorText("Server error");
+                setIsError(true);
             }
         };
 
@@ -229,11 +231,13 @@ function Chat({ adminid }) {
             if (res.ok) {
                 console.log("Request sent", data);
             } else {
-                alert(data.error || "Failed to send request");
+                setErrorText(`${data.error}` || "Failed to send request");
+                setIsError(true);
             }
         } catch (err) {
-            console.error(err);
-            alert("Server error");
+            // console.error(err);
+            setErrorText("Server error");
+            setIsError(true);
         }
     }
 
@@ -262,13 +266,15 @@ function Chat({ adminid }) {
                 setaddSearchedUsers(data.users);
 
             } else {
-                alert(data.error || "Some error occurred");
+                setErrorText(`${data.error}` || "Some error occurred");
+                setIsError(true);
                 setaddSearchedUsers([]);
             }
 
         } catch (err) {
-            console.error(err);
-            alert("Server error");
+            // console.error(err);
+            setErrorText("Server error");
+            setIsError(true);
             setaddSearchedUsers([]);
         }
     };
@@ -300,13 +306,15 @@ function Chat({ adminid }) {
                 setChatUser("");
             }
             else {
-                alert(data.error || "Some error occurred");
+                setErrorText(`${data.error}` || "Some error occurred");
+                setIsError(true);
                 setNullname("");
                 setChatUser("");
             }
         } catch (err) {
-            console.error(err);
-            alert("Server error");
+            // console.error(err);
+            setErrorText("Server error");
+            setIsError(true);
             setNullname("");
             setChatUser("");
 
@@ -336,12 +344,14 @@ function Chat({ adminid }) {
 
 
             } else {
-                alert(data.error || "Some error occurred");
+                setErrorText(`${data.error}` || "Some error occurred");
+                setIsError(true);
                 setChatUser("");
             }
         } catch (err) {
-            console.error(err);
-            alert("Server error");
+            // console.error(err);
+            setErrorText("Server error");
+            setIsError(true);
             setChatUser("");
         }
     }
@@ -359,14 +369,16 @@ function Chat({ adminid }) {
                 console.log("message delivered");
                 setMessageText("");
             } else {
-                alert(data.error || "Some error occurred");
+                setErrorText(`${data.error}` || "Some error occurred");
+                setIsError(true);
                 setMessageText("");
             }
             setMessageText("");
         } catch (err) {
-            console.error(err);
+            // console.error(err);
             setMessageText("");
-            alert("Server error...");
+            setErrorText("Server error");
+            setIsError(true);
             setMessageText("");
         }
     }
@@ -544,7 +556,9 @@ function Chat({ adminid }) {
                 })
             }
         } catch (arr) {
-            alert("Something went wrong")
+            setErrorText("Something went wrong");
+            setIsError(true);
+            
         }
     }
 
