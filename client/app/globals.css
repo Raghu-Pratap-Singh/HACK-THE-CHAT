@@ -2865,7 +2865,7 @@ RECEIVER (LEFT)
   flex-direction: row;
   align-items: center;
   justify-content: space-evenly;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(6px);
   z-index: 5;
 }
 
@@ -2878,12 +2878,12 @@ RECEIVER (LEFT)
   align-items: center;
   justify-content: start;
   border-radius: 8px;
-  background-color: #ffbcbc;
+  background-color: #680000;
   height: fit-content;
   border-width: 2.3px;
   border-style: solid;
   border-color: rgba(255, 0, 0, 0.8);
-  box-shadow: inset 0px 0px 3px red;
+  box-shadow: inset 0px 0px 7px rgba(255,0,0,0.4);
   user-select: none;
 }
 
@@ -2891,22 +2891,26 @@ RECEIVER (LEFT)
   user-select: none;
   width: 100%;
   text-align: center;
-  color: red;
-  font-size: 25px;
+  color: rgb(255, 255, 255);
+  font-size: 20px;
   font-family: "Courier New", monospace;
   font-weight: 900;
 }
 
 #error_message p {
-  color: red;
+  color: rgb(255, 255, 255);
   font-size: 20px;
   font-weight: 400;
+  font-family: "Courier New", monospace;
+  
 }
 
 #error_move_on {
+  font-family: "Courier New", monospace;
+  font-weight: 600;
   color: white;
-  background-color: red;
-  padding: 10px;
+  background-color: rgb(255, 0, 0);
+  padding: 6px;
   padding-left: 20px;
   padding-right: 20px;
   margin-top: 10px;
@@ -2919,7 +2923,7 @@ RECEIVER (LEFT)
     transition-duration: 0.2s;
   }
   #error_move_on:hover {
-    transform: translateY(-3px);
+    transform: translateY(-1.4px);
     background-color: rgb(201, 0, 0);
   }
 }
