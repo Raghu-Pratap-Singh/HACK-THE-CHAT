@@ -22,7 +22,7 @@ function Profile() {
   let welcomeref = useRef();
   let welcomerref = useRef();
   let headref = useRef()
-  let { list, setList, online, setOnline, is_error} = useContext(Context);
+  let { list, setList, online, setOnline, is_error } = useContext(Context);
   const router = useRouter();
   const [username, setUsername] = useState("");
 
@@ -114,46 +114,124 @@ function Profile() {
 
   }, [])
 
-  useEffect(()=>{
-    if (username && username.length>0) {
+  useEffect(() => {
+    if (username && username.length > 0) {
       // play animation after 5.6 seconds
       let t = gsap.timeline()
       if (welcomerref.current) {
         console.log("playing")
         t.to(welcomerref.current, {
-          opacity:1,
-          delay:5.2,
-          duration:0.4,
+          opacity: 1,
+          delay: 5.2,
+          duration: 0.4,
 
         })
-        t.to(headref.current, {
-          
-          opacity:1,
-          duration:0.3,
-          delay:0.3
+        t.set(headref.current, {
+          opacity: 0,
+          filter: "blur(8px)"
         })
+
+        /* ENTRY GLITCH */
+
+        t.to({}, {
+
+          duration: 0.7,
+
+          onUpdate: () => {
+
+            gsap.set(headref.current, {
+
+              opacity: Math.random() > 0.45 ? 1 : 0,
+
+              x: gsap.utils.random(-25, 25),
+
+              y: gsap.utils.random(-12, 12),
+
+              skewX: gsap.utils.random(-20, 20),
+
+              filter: `blur(${gsap.utils.random(0, 6)}px)`
+
+            });
+
+          },
+
+
+        })
+
+        /* CLEAN APPEAR */
+
         t.to(headref.current, {
-          
-          opacity:0,
-          duration:0.4,
-          delay:1
+
+          opacity: 1,
+
+          x: 0,
+
+          y: 0,
+
+          skewX: 0,
+
+          filter: "blur(0px)",
+
+          duration: 0.18
+
+        })
+
+        /* STAY VISIBLE */
+
+        t.to(headref.current, {
+
+          duration: 1.2
+
+        })
+
+        /* EXIT GLITCH */
+
+        t.to({}, {
+
+          duration: 0.7,
+
+          onUpdate: () => {
+
+            gsap.set(headref.current, {
+
+              opacity: Math.random() > 0.5 ? 1 : 0,
+
+              x: gsap.utils.random(-35, 35),
+
+              y: gsap.utils.random(-20, 20),
+
+              skewX: gsap.utils.random(-25, 25),
+
+              filter: `blur(${gsap.utils.random(0, 10)}px)`
+
+            });
+
+          },
+
+
+        })
+
+        /* FINAL HIDE */
+
+        t.set(headref.current, {
+          opacity: 0
         })
         t.to(welcomerref.current, {
-          opacity:0,
-          duration:0.7,
-          delay:0.1
+          opacity: 0,
+          duration: 0.7,
+          delay: 0.1
         })
         t.to(welcomerref.current, {
-          zIndex:-1
+          zIndex: -1
         })
       }
-      
+
     }
-  },[username])
+  }, [username])
 
   return (
     <>
-      {is_error && <Error/>}
+      {is_error && <Error />}
       <Back />
 
       <Nav adminid={id} />
@@ -169,7 +247,7 @@ function Profile() {
       </div>
       <div id="welcomer" ref={welcomerref}>
         <h1 ref={headref}>Welcome {username}</h1>
-      
+
       </div>
       <Chat adminid={id} />
     </>
