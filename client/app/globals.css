@@ -2839,16 +2839,97 @@ RECEIVER (LEFT)
   }
 }
 
+/* Glassmorphism + cyberpunk / hacker vibe */
+
 .link_name {
-  border-width: 2px;
-  padding: 10px;
-  padding-left: 16px;
-  padding-right: 16px;
-  border-radius: 20px;
-  transition-duration: 0.2s;
+  position: relative;
+  display: inline-block;
+  padding: 12px 26px;
   
- box-shadow: inset 0px 0px 18px rgb(255, 255, 255, 0.6); 
- background-color: rgba(98, 98, 98, 0.2);
+  color: #d7ffe7;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  text-decoration: none;
+
+  border: 1px solid rgba(120, 255, 180, 0.35);
+  border-radius: 18px;
+
+  background: rgba(20, 30, 25, 0.28);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  box-shadow:
+    0 0 12px rgba(0, 255, 140, 0.15),
+    inset 0 0 18px rgba(255, 255, 255, 0.08),
+    inset 0 0 2px rgba(255, 255, 255, 0.4);
+
+  overflow: hidden;
+  transition: all 0.25s ease;
+}
+
+/* subtle neon line */
+.link_name::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  
+  border-radius: inherit;
+  padding: 1px;
+  
+  background: linear-gradient(
+    135deg,
+    rgba(0, 255, 170, 0.7),
+    rgba(255,255,255,0.15),
+    rgba(0, 255, 170, 0.5)
+  );
+
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+
+  pointer-events: none;
+}
+
+/* glow pulse */
+.link_name::after {
+  content: "";
+  position: absolute;
+  top: -40%;
+  left: -120%;
+  
+  width: 80%;
+  height: 200%;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.22),
+    transparent
+  );
+
+  transform: rotate(18deg);
+  transition: 0.6s;
+}
+
+.link_name:hover {
+  transform: translateY(-2px) scale(1.02);
+
+  border-color: rgba(120, 255, 180, 0.7);
+
+  box-shadow:
+    0 0 24px rgba(0, 255, 140, 0.28),
+    0 0 48px rgba(0, 255, 140, 0.12),
+    inset 0 0 22px rgba(255,255,255,0.12);
+
+  color: #ffffff;
+}
+
+.link_name:hover::after {
+  left: 140%;
 }
 
 .link_name:hover {
