@@ -20,9 +20,11 @@ gsap.registerPlugin(useGSAP, ScrollTrigger);
 function Profile() {
   const { id } = useParams();
   let welcomeref = useRef();
+  let welcomerref = useRef();
+  let headref = useRef()
   let { list, setList, online, setOnline, is_error} = useContext(Context);
   const router = useRouter();
-
+  const [username, setUsername] = useState("");
 
   useEffect(() => {
 
@@ -72,9 +74,12 @@ function Profile() {
         method: "GET",
         credentials: "include",
       });
+      const data = await res.json();
       if (!res.ok) {
         router.push("/Login");
       }
+      console.log(data)
+      setUsername(data.user.username);
     };
     checkAuth();
   }, []);
@@ -109,10 +114,48 @@ function Profile() {
 
   }, [])
 
+  useEffect(()=>{
+    if (username && username.length>0) {
+      // play animation after 5.6 seconds
+      let t = gsap.timeline()
+      if (welcomerref.current) {
+        console.log("playing")
+        t.to(welcomerref.current, {
+          opacity:1,
+          delay:5.2,
+          duration:0.4,
+
+        })
+        t.to(headref.current, {
+          
+          opacity:1,
+          duration:0.3,
+          delay:0.3
+        })
+        t.to(headref.current, {
+          
+          opacity:0,
+          duration:0.4,
+          delay:1
+        })
+        t.to(welcomerref.current, {
+          opacity:0,
+          duration:0.7,
+          delay:0.1
+        })
+        t.to(welcomerref.current, {
+          zIndex:-1
+        })
+      }
+      
+    }
+  },[username])
+
   return (
     <>
       {is_error && <Error/>}
       <Back />
+
       <Nav adminid={id} />
       <div id="welcome" ref={welcomeref}>
         <h2>P</h2>
@@ -123,6 +166,10 @@ function Profile() {
         <h2>L</h2>
         <h2>E</h2>
 
+      </div>
+      <div id="welcomer" ref={welcomerref}>
+        <h1 ref={headref}>Welcome {username}</h1>
+      
       </div>
       <Chat adminid={id} />
     </>
