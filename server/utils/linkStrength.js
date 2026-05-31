@@ -7,10 +7,10 @@ function strength_calculator(avg50, avg) {
 
     if (avg50>0 && avg>0) {
         // strong bond
-        if (avg50 <= 0.25 * avg) {
+        if ((avg50 <= 1.25 * avg )&&(avg50 >= 0.75 * avg)) {
             // fast reply time recently
             return 3;
-        } else if (avg50 <= 0.75 * avg) {
+        } else if ((avg50 <= 1.75 * avg)&&(avg50 >= 0.25 * avg)) {
             // moderate reply time recently
             return 2;
         } else {
