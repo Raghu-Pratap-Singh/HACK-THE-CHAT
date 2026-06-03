@@ -943,7 +943,7 @@ RECEIVER (LEFT)
 
   /* chat css */
   #chat_display {
-
+    opacity: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -2655,8 +2655,8 @@ RECEIVER (LEFT)
     border-radius: 4px;
     background-color: rgba(0, 255, 150, 0.1);
     padding: 4px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 6px;
+    padding-right: 6px;
     
   }
 }
