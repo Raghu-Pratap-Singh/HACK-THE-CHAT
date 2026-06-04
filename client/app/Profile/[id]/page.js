@@ -126,95 +126,15 @@ function Profile() {
           duration: 0.4,
 
         })
-        t.set(headref.current, {
-          opacity: 0,
-          filter: "blur(8px)"
-        })
-
-        /* ENTRY GLITCH */
-
-        t.to({}, {
-
-          duration: 0.7,
-
-          onUpdate: () => {
-
-            gsap.set(headref.current, {
-
-              opacity: Math.random() > 0.45 ? 1 : 0,
-
-              x: gsap.utils.random(-25, 25),
-
-              y: gsap.utils.random(-12, 12),
-
-              skewX: gsap.utils.random(-20, 20),
-
-              filter: `blur(${gsap.utils.random(0, 6)}px)`
-
-            });
-
-          },
-
-
-        })
-
-        /* CLEAN APPEAR */
-
         t.to(headref.current, {
-
-          opacity: 1,
-
-          x: 0,
-
-          y: 0,
-
-          skewX: 0,
-
-          filter: "blur(0px)",
-
-          duration: 0.18
-
+          ease:"power2.out",
+          opacity:1,
+          duration:0.3
         })
-
-        /* STAY VISIBLE */
-
         t.to(headref.current, {
-
-          duration: 1.2
-
-        })
-
-        /* EXIT GLITCH */
-
-        t.to({}, {
-
-          duration: 0.7,
-
-          onUpdate: () => {
-
-            gsap.set(headref.current, {
-
-              opacity: Math.random() > 0.5 ? 1 : 0,
-
-              x: gsap.utils.random(-35, 35),
-
-              y: gsap.utils.random(-20, 20),
-
-              skewX: gsap.utils.random(-25, 25),
-
-              filter: `blur(${gsap.utils.random(0, 10)}px)`
-
-            });
-
-          },
-
-
-        })
-
-        /* FINAL HIDE */
-
-        t.set(headref.current, {
-          opacity: 0
+          opacity:0,
+          duration:0.3,
+          delay:1.4
         })
         t.to(welcomerref.current, {
           opacity: 0,

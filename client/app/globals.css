@@ -3044,8 +3044,9 @@ RECEIVER (LEFT)
 }
 #welcomer h1 {
   opacity: 0;
+ 
   position: relative;
-  display: inline-block;
+  /* display: inline-block; */
   user-select: none;
   font-size: 20px;
   word-spacing: 4px;
