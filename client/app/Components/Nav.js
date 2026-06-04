@@ -5,7 +5,7 @@ import { Context } from '@/app/ContextAPI/Tools';
 import { socket } from "@/app/socket"
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-
+import Error from "@/app/Components/Error";
 function Nav({ adminid }) {
     let navref = useRef();
     let list_ref = useRef();
@@ -13,7 +13,8 @@ function Nav({ adminid }) {
     const router = useRouter();
     let [fr, setFr] = useState([]);
     let route = process.env.NEXT_PUBLIC_HOMEROUTE;
-    let { list, setList, online, setOnline } = useContext(Context);
+    let user_route = process.env.NEXT_PUBLIC_USERROUTE;
+    let { list, setList, online, setOnline, is_error, setIsError, error_text,  setErrorText} = useContext(Context);
 
     useEffect(() => {
 
@@ -47,7 +48,7 @@ function Nav({ adminid }) {
     useEffect(() => {
         const fetchRequests = async () => {
             try {
-                let reqs = await fetch(`${route}/users/get_requests`, {
+                let reqs = await fetch(`${user_route}/get_requests`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     credentials: "include",
@@ -63,11 +64,13 @@ function Nav({ adminid }) {
                     let data = arr.usernames.map(person => person.username)
                     setFr(data || []);
                 } else {
-                    alert(arr.error || "Failed to fetch requests");
+                    setErrorText(arr.error || "Failed to fetch requests")
+                    setIsError(true)
                 }
             } catch (err) {
-                console.error(err);
-                alert("Server error");
+                
+                setErrorText('Server error')
+                setIsError(true)
             }
         };
 
@@ -159,10 +162,12 @@ function Nav({ adminid }) {
 
             }
             else {
-                alert(data.error || "Some error occured");
+                setErrorText(data.error || "Some error occured")
+                setIsError(true)
             }
         } catch (err) {
-            alert("Server error.......");
+            setErrorText("Server error")
+            setIsError(true)
         }
     }
 
@@ -187,10 +192,12 @@ function Nav({ adminid }) {
 
             }
             else {
-                alert(data.error || "Some error occured");
+                setErrorText(data.error || "Some error occured")
+                setIsError(true)
             }
         } catch (err) {
-            alert("Server error");
+            setErrorText("Server error")
+            setIsError(true)
         }
 
     }
@@ -211,12 +218,12 @@ function Nav({ adminid }) {
                 }
                 router.push("/Login");
             } else {
-                console.log(data.error);
-                alert("Some error occurred");
+                setErrorText("Some error occured")
+                setIsError(true)
             }
         } catch (err) {
-            console.log(err);
-            alert("Server Error");
+            setErrorText("Server error")
+            setIsError(true)
         }
     }
     const [isWide, setIsWide] = useState(false);
