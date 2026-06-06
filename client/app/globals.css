@@ -419,65 +419,43 @@ body {
   align-items: center;
   justify-content: space-evenly;
 
-  width: 100px;
-  height: 50px;
+  /* width: 90px;
+  height: 45px; */
 
   right: 0px;
 
   border-radius: 10px;
-  padding: 0px;
+  padding: 15px;
+  padding-left: 18px;
+  padding-right: 18px;
 
-  margin: 5px;
+  margin: 10px;
   margin-right: 18px;
   margin-left: 18px;
 
-  font-size: 15px;
+  font-size: 17px;
 
-  color: rgb(255, 80, 80);
+  color: rgb(255, 255, 255);
   background-color: rgba(0, 0, 0, 0.6);
 
   border-style: solid;
-  border-width: 2px;
-  border-color: rgb(255, 0, 0);
 
   overflow: hidden;
-  
-  text-shadow: 0 0 6px rgba(255, 0, 0, 0.8);
-
-  box-shadow:
-    0 0 6px rgba(255, 0, 0, 0.6),
-    inset 0 0 6px rgba(255, 0, 0, 0.3);
-
-  transition-duration: 0.3s;
+  line-height: 12px;
+  transition-duration: 0.17s;
 }
-
 @media (min-width: 768px) {
   #logout:hover {
     cursor: pointer;
-
-    background-color: rgba(255, 0, 0, 0.15);
-
-    box-shadow:
-      0 0 12px rgba(255, 0, 0, 0.9),
-      inset 0 0 10px rgba(255, 0, 0, 0.4);
-
-    border-color: rgb(255, 0, 0);
-    color: rgb(255, 255, 255);
+    background-color:rgba(255,0,0,0.6);
   }
 }
-
 @media (max-width: 768px) {
   #logout:active {
     cursor: pointer;
 
-    background-color: rgba(0, 0, 0, 0.8);
-    color: rgb(255, 0, 0);
-
-    box-shadow:
-      0 0 14px rgba(255, 0, 0, 1),
-      inset 0 0 12px rgba(255, 0, 0, 0.5);
-
-    border-color: rgb(255, 0, 0);
+    background-color:rgba(255,0,0,0.6);
+    
   }
 }
 
@@ -1537,8 +1515,7 @@ RECEIVER (LEFT)
 
 
   #logout {
-    width: 85px;
-    height: 40px;
+    
     margin-top: 15px;
   }
 
@@ -2662,8 +2639,7 @@ RECEIVER (LEFT)
 }
 
 #logout {
-  color: rgb(255, 169, 169);
-  background: linear-gradient(90deg, rgba(255, 0, 0, 0.7), rgba(255, 0, 0, 0.4), rgba(255, 0, 0, 0.3), rgba(255, 0, 0, 0.2));
+  background-color: red;
 }
 
 
