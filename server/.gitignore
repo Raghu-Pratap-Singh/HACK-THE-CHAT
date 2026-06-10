@@ -21,3 +21,5 @@ build/
 
 utils/logScore.js
 utils/linkStrength.js
+
+loadtest/
