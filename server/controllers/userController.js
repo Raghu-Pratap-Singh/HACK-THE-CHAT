@@ -226,7 +226,7 @@ async function fill(req, res) {
     }
 
     await user.populate([
-      { path: "friends", select: "username -_id" }
+      { path: "friends", select: "username level -_id" }
     ]);
     let arr = user.friends;
     let pending_arr = user.pending

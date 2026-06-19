@@ -152,6 +152,7 @@ function Chat({ adminid }) {
 
                 if (req.ok) {
                     setList(data.usernames);
+                    console.log(data.usernames);
                     setPendingusers(new Set(data.pending_arr));
                 }
                 else {
@@ -620,7 +621,9 @@ function Chat({ adminid }) {
                                     <div className="friend_bar" key={index}>
                                         {online.has(user.username) && <div className="isonline"></div>}
                                         {pending_users.has(user.username) && <div className="ispending"></div>}
-                                        <p>{user.username}</p>
+                                        <p onMouseOver={()=>{
+                                            console.log(user.level);
+                                        }}>{user.username}</p>
                                         <div>
                                             <div className="chat_with_friend" onClick={() => {
 
