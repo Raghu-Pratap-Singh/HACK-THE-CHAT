@@ -151,8 +151,10 @@ function Chat({ adminid }) {
                 const data = await req.json();
 
                 if (req.ok) {
+                    
                     setList(data.usernames);
-                    console.log(data.usernames);
+
+                    
                     setPendingusers(new Set(data.pending_arr));
                 }
                 else {
@@ -571,6 +573,27 @@ function Chat({ adminid }) {
         })
     }
 
+    function appear_badge(index) {
+        let id = `#friend_badge${index}`
+        let t = gsap.timeline();
+        t.to(id, {
+            delay:-0.2,
+            opacity:1,
+            duration:0.3
+        })
+        
+    }
+    function disappear_badge(index) {
+        let id = `#friend_badge${index}`
+        let t = gsap.timeline();
+        
+        t.to(id, {
+            duration:0.3,
+            delay:-0.2,
+            opacity:0
+        })
+    }
+
     function cut_direct_link() {
         socket.emit("cut_link", adminid);
     }
@@ -619,11 +642,18 @@ function Chat({ adminid }) {
                             {entry.length === 0
                                 ? list.map((user, index) => (
                                     <div className="friend_bar" key={index}>
+                                        <div id={`friend_badge${index}`} className="friend_badge">
+                                            <img src={`/${user.level}.png`}></img>
+                                        </div>
                                         {online.has(user.username) && <div className="isonline"></div>}
                                         {pending_users.has(user.username) && <div className="ispending"></div>}
                                         <p onMouseOver={()=>{
-                                            console.log(user.level);
-                                        }}>{user.username}</p>
+                                            appear_badge(index);
+                                        }}
+                                        onMouseLeave={()=>{
+                                            disappear_badge(index);
+                                        }}
+                                        >{user.username}</p>
                                         <div>
                                             <div className="chat_with_friend" onClick={() => {
 

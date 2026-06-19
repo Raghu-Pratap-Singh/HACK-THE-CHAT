@@ -3028,3 +3028,23 @@ RECEIVER (LEFT)
   word-spacing: 4px;
   color: #ffffff;
 }
+
+
+/* friend badge css */
+.friend_badge {
+  position: absolute;
+  top: 50px;
+  left: 50px;
+  user-select: none;
+  opacity: 0;
+  z-index: 3;
+
+}
+.friend_badge img {
+  width: 200px;
+  height: 60px;
+  border-radius: 10px;
+  border-width: 1px;
+  border-color: rgb(0, 255, 68);
+  user-select: none;
+}
