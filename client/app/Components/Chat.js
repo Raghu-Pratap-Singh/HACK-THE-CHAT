@@ -39,15 +39,15 @@ function Chat({ adminid }) {
 
     useEffect(() => {
         const handler = (username) => {
-            console.log(username)
+            // console.log(username)
             setList(prev =>
                 prev.filter(user => user.username !== username)
             )
         }
 
         const new_message_handler = (message_object) => {
-            console.log(message_object);
-            console.log(message_object)
+            // console.log(message_object);
+            // console.log(message_object)
             setMessagelist(prev => [...prev, message_object]);
         }
 
@@ -79,7 +79,7 @@ function Chat({ adminid }) {
 
                 
             if (f_ref.current) {
-                console.log("performing..")
+                // console.log("performing..")
                 let t = gsap.timeline();
                 t.to(f_ref.current, {
                     background:"linear-gradient(0deg,rgba(0, 255, 100, 0.5),rgba(0, 0, 0, 0.75))",
@@ -229,7 +229,7 @@ function Chat({ adminid }) {
             const data = await res.json();
 
             if (res.ok) {
-                console.log("Request sent", data);
+                // console.log("Request sent", data);
             } else {
                 setErrorText(`${data.error}` || "Failed to send request");
                 setIsError(true);
@@ -339,7 +339,7 @@ function Chat({ adminid }) {
                 if (messages.length > 0) {
                     oldestTimeRef.current = messages[0].time;
                 }
-                console.log(messages)
+                // console.log(messages)
                 setMessagelist(prev => [...messages, ...prev]);
 
 
@@ -366,7 +366,7 @@ function Chat({ adminid }) {
             })
             let data = await res.json();
             if (res.ok) {
-                console.log("message delivered");
+                // console.log("message delivered");
                 setMessageText("");
             } else {
                 setErrorText(`${data.error}` || "Some error occurred");

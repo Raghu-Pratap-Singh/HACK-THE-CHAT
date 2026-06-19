@@ -29,19 +29,19 @@ function Profile() {
   useEffect(() => {
 
     function onConnect() {
-      console.log("connected socket", socket.id);
+      
 
       // send user_id to backend
       socket.emit("joined", id);
     }
 
     function onDisconnect() {
-      console.log("disconnected", socket.id);
+      // console.log("disconnected", socket.id);
     }
 
     function handleUpdatedUsers(data) {
       setOnline(new Set(data));
-      console.log(data);
+      // console.log(data);
     }
 
     //  CONNECT when entering profile
@@ -78,7 +78,7 @@ function Profile() {
       if (!res.ok) {
         router.push("/Login");
       }
-      console.log(data)
+      // console.log(data)
       setUsername(data.user.username);
     };
     checkAuth();
@@ -119,7 +119,7 @@ function Profile() {
       // play animation after 5.6 seconds
       let t = gsap.timeline()
       if (welcomerref.current) {
-        console.log("playing")
+        // console.log("playing")
         t.to(welcomerref.current, {
           opacity: 1,
           delay: 5.2,

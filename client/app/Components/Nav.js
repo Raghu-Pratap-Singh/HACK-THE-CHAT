@@ -214,7 +214,7 @@ function Nav({ adminid }) {
                 // disconnect socket here
                 if (socket) {
                     socket.disconnect();
-                    console.log("Socket disconnected manually.");
+                    // console.log("Socket disconnected manually.");
                 }
                 router.push("/Login");
             } else {
