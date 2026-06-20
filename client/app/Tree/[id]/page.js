@@ -35,17 +35,14 @@ function Tree() {
           setStrong(data.strong);
           setModerate(data.moderate);
           setWeak(data.weak);
-          console.log(data);
         } else {
           setStrong([]);
           setModerate([]);
           setWeak([]);
           alert("Server error")
-          console.log(data.error);
         }
       } catch (err) {
         alert("Server error")
-        console.error(err);
       }
     }
     get_tree();
