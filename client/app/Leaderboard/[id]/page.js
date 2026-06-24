@@ -17,7 +17,7 @@ function Leaderboard() {
     let logroute = process.env.NEXT_PUBLIC_LOGROUTE;
     let route = process.env.NEXT_PUBLIC_HOMEROUTE;
 
-    
+
     let [badge, setBadge] = useState("");
     let [logscore, setLogscore] = useState(0);
     const { id } = useParams();
@@ -36,11 +36,15 @@ function Leaderboard() {
             // profile page will handle reconnection
         };
     }, []);
+    function roundTo(num, places) {
+        const factor = Math.pow(10, places);
+        return Math.round(num * factor) / factor;
+    }
     useEffect(() => {
 
 
         const send_badge_request = async () => {
-            
+
 
             try {
                 let res = await fetch(`${logroute}/getlog/${id}`, {
@@ -53,7 +57,7 @@ function Leaderboard() {
 
                 if (res.ok) {
                     setBadge(data.badge_url);
-                    setLogscore(Math.floor(data.score));
+                    setLogscore(roundTo(data.score, 2));
                     console.log(data)
                 } else {
                     setBadge("");
@@ -79,7 +83,7 @@ function Leaderboard() {
                     setLeaders(
                         data.leaders.map(user => ({
                             name: user.username,
-                            LOG: Math.floor(user.logScore),
+                            LOG: roundTo(user.logScore, 2),
                             badge: `/badges/${user.level}.png`
                         }))
                     );
