@@ -56,7 +56,7 @@ function Leaderboard() {
                 let data = await res.json();
 
                 if (res.ok) {
-                    setBadge(data.badge_url);
+                    setBadge(`/${data.badge_url}.png`);
                     setLogscore(roundTo(data.score, 2));
                     console.log(data)
                 } else {
@@ -80,11 +80,12 @@ function Leaderboard() {
 
                 let data = await res.json();
                 if (res.ok) {
+                    console.log(data)
                     setLeaders(
                         data.leaders.map(user => ({
                             name: user.username,
                             LOG: roundTo(user.logScore, 2),
-                            badge: `/badges/${user.level}.png`
+                            badge: `/${user.level}.png`
                         }))
                     );
                 }
@@ -172,7 +173,7 @@ function Leaderboard() {
             }} id="profile_backer">PROFILE</button>
             <Link href={"/Loginfo"}><h1 title="Click to understand LOG score">LOG : {logscore}</h1></Link>
             <img className="badge_img"
-                src={`${route}${badge}`}
+                src={`${badge}` || `/script_kiddie.png`}
 
             />
 
@@ -189,7 +190,7 @@ function Leaderboard() {
                     <div className="righter">
                         <h2 className="LOG_text">LOG : {user.LOG}</h2>
                         <img className="leader_img"
-                            src={`${route}${user.badge}`}
+                            src={`${user.badge}`}
 
                         />
                     </div>

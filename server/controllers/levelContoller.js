@@ -23,7 +23,7 @@ async function initial_badge_and_score (req,res) {
                 logScore : log_score
             }
         })
-        const badge_url = `/badges/${title}.png`;
+        const badge_url = `${title}`;
         return res.status(200).json({ok:true, badge_url : badge_url, score: log_score})
 
     } catch (err) {
