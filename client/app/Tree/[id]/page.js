@@ -97,12 +97,7 @@ function Tree() {
           <h1>STRONG LINKS
             <div className="link_dot"></div>
           </h1>
-          {/* <div className="branch"></div>
-        <div className="link_name">Raghu</div>
-        <div className="branch"></div>
-        <div className="link_name">Raghu</div>
-        <div className="branch"></div>
-        <div className="link_name">Raghu</div> */}
+          
         {strong_links.map((user, index) => (
           <React.Fragment key={index}>
             <div className="branchw"></div>
@@ -115,12 +110,7 @@ function Tree() {
 
             <div className="link_dot"></div>
           </h1>
-          {/* <div className="branchm"></div>
-        <div className="link_name">Raghu</div>
-        <div className="branchm"></div>
-        <div className="link_name">Raghu</div>
-        <div className="branchm"></div>
-        <div className="link_name">Raghu</div> */}
+          
         {moderate_links.map((user, index) => (
           <React.Fragment key={index}>
             <div className="branchw"></div>
@@ -133,12 +123,7 @@ function Tree() {
 
             <div className="link_dot"></div>
           </h1>
-          {/* <div className="branchw"></div>
-        <div className="link_name">Raghu</div>
-        <div className="branchw"></div>
-        <div className="link_name">Raghu</div>
-        <div className="branchw"></div>
-        <div className="link_name">Raghu</div> */}
+          
         {weak_links.map((user, index) => (
           <React.Fragment key={index}>
             <div className="branchw"></div>

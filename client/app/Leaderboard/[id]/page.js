@@ -58,11 +58,10 @@ function Leaderboard() {
                 if (res.ok) {
                     setBadge(`/${data.badge_url}.png`);
                     setLogscore(roundTo(data.score, 2));
-                    console.log(data)
+                    
                 } else {
                     setBadge("");
                     setLogscore(0);
-                    console.log(data.error);
                 }
             } catch (err) {
                 console.error(err);
