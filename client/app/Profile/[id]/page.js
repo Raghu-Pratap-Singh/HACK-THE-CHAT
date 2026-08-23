@@ -70,7 +70,7 @@ function Profile() {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_HOMEROUTE}/users/me`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_USERROUTE}/me`, {
         method: "GET",
         credentials: "include",
       });

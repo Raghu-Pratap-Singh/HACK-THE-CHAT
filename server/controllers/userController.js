@@ -287,7 +287,30 @@ async function remove_friend(req, res) {
   }
 }
 
-
+async function get_mentioned_users(req, res) {
+  try {
+    let { username } = req.params;
+    let users = await userModel.find({
+      username : {
+        $regex : `^${username}`,
+        $options: "i"
+      }
+    }, {
+      _id:0,
+      username:1,
+      level: 1,
+      logScore: 1
+    })
+    users.forEach((val)=>{
+      val.logScore = Math.round(val.logScore * 100)/100
+    })
+    console.log(users)
+    return res.status(200).json({ok : true, users: users});
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({error : "Something went wrong"});
+  }
+}
 
 module.exports.fill = fill;
 module.exports.accept = accept;
@@ -296,6 +319,7 @@ module.exports.search_friend = search_friend;
 module.exports.add_friend = add_friend;
 module.exports.get_friend_requests = get_friend_requests;
 module.exports.remove_friend = remove_friend;
+module.exports.get_mentioned_users = get_mentioned_users;
 
 
 // SQL	MongoDB

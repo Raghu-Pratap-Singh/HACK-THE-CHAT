@@ -941,6 +941,8 @@ RECEIVER (LEFT)
     padding: 3px;
   }
 
+  
+
   #message {
     width: 100%;
     color: #b6ffda;
@@ -3047,4 +3049,191 @@ RECEIVER (LEFT)
   border-width: 1px;
   border-color: rgb(0, 255, 68);
   user-select: none;
+}
+
+
+/* MENTIONED USERS CSS BOX */
+#mention_them {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+  border-radius: 6px;
+  
+  background-color:black;
+
+  bottom: 50px;
+  border-width: 1px;
+  border-color: rgb(0, 255, 0);
+}
+#mention_them li {
+  list-style: none;
+  padding: 4px;
+  color: rgb(0, 255, 0);
+  text-align: left;
+  width: 100%;
+  border-radius: 6px;
+  position: relative;
+  transition-duration: 0.1s;
+  font-family: monospace;
+  padding: 5px;
+  padding-left: 15px;
+  padding-right: 7px;
+  font-size: 15px;
+  background-color: black;
+}
+#mention_them li:hover {
+  background-color: rgb(0, 223, 0, 0.3);
+  cursor: pointer;
+}
+
+.mention_badge {
+  position: relative;
+  display: inline-block;
+  width: 100px;
+  height: 40px;
+  border-radius: 5px;
+  
+}
+.mention_message_script_kiddie {
+  position: relative;
+  display: inline-block;
+  padding: 5px;
+  padding-left: 15px;
+  padding-right: 7px;
+  border: 1px solid #20ff75;
+  background: linear-gradient(
+    90deg,
+    rgb(0, 145, 45),
+    rgb(0, 115, 38),
+    rgb(0, 72, 27),
+    rgb(0, 20, 10),
+    rgb(0, 0, 0)
+  );
+  color: #8affb5;   /* brighter */
+  border-radius: 10px;
+  font-family: monospace;
+  font-size: 13px;
+  font-family: "Courier New", monospace;
+  line-height: 1.35;
+}
+
+.mention_message_shell_user {
+  position: relative;
+  display: inline-block;
+  padding: 5px;
+  padding-left: 15px;
+  padding-right: 7px;
+  border: 1px solid #19bfff;
+  background: linear-gradient(
+    90deg,
+    rgb(0, 105, 255),
+    rgb(0, 70, 205),
+    rgb(0, 52, 120),
+    rgb(0, 18, 38),
+    rgb(0, 0, 0)
+  );
+  color: #8cddff;   /* brighter */
+  border-radius: 10px;
+  font-family: monospace;
+  font-size: 13px;
+  font-family: "Courier New", monospace;
+  line-height: 1.35;
+}
+
+.mention_message_kernel {
+
+  position: relative;
+  display: inline-block;
+  padding: 5px;
+  padding-left: 15px;
+  padding-right: 7px;
+  border: 1px solid #d580ff;
+  background: linear-gradient(
+    90deg,
+    rgb(135, 0, 210),
+    rgb(100, 0, 170),
+    rgb(65, 0, 110),
+    rgb(20, 0, 35),
+    rgb(0, 0, 0)
+  );
+  color: #e6a8ff;
+  border-radius: 10px;
+  font-family: monospace;
+  font-size: 13px;
+  font-family: "Courier New", monospace;
+  line-height: 1.35;
+}
+
+.mention_message_overlord {
+
+  position: relative;
+  display: inline-block;
+  padding: 5px;
+  padding-left: 15px;
+  padding-right: 7px;
+  border: 1px solid #ffb52e;
+  background: linear-gradient(
+    90deg,
+    rgb(190, 105, 0),
+    rgb(155, 70, 0),
+    rgb(100, 40, 0),
+    rgb(30, 12, 0),
+    rgb(0, 0, 0)
+  );
+  color: #ffd580;
+  border-radius: 10px;
+  font-family: monospace;
+  font-size: 13px;
+  font-family: "Courier New", monospace;
+  line-height: 1.35;
+}
+
+.mention_message_root {
+
+  position: relative;
+  display: inline-block;
+  padding: 5px;
+  padding-left: 15px;
+  padding-right: 7px;
+  border: 1px solid #ff4d5e;
+  background: linear-gradient(
+    90deg,
+    rgb(190, 0, 25),
+    rgb(145, 0, 20),
+    rgb(90, 0, 12),
+    rgb(28, 0, 5),
+    rgb(0, 0, 0)
+  );
+  color: #ff9da8;
+  border-radius: 10px;
+  font-family: monospace;
+  font-size: 13px;
+  font-family: "Courier New", monospace;
+  line-height: 1.35;
+}
+
+.mention_message_exploit_dev {
+
+  position: relative;
+  display: inline-block;
+  padding: 5px;
+  padding-left: 15px;
+  padding-right: 7px;
+  border: 1px solid #5edcff;
+  background: linear-gradient(
+    90deg,
+    rgb(0, 165, 210),
+    rgb(0, 125, 175),
+    rgb(0, 75, 110),
+    rgb(0, 25, 40),
+    rgb(0, 0, 0)
+  );
+  color: #a8edff;
+  border-radius: 10px;
+  font-family: monospace;
+  font-size: 13px;
+  font-family: "Courier New", monospace;
+  line-height: 1.35;
 }

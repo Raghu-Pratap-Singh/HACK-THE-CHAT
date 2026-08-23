@@ -13,7 +13,7 @@ function Chat({ adminid }) {
     const [searchedUsers, setSearchedUsers] = useState([]);
     let [entry, setEntry] = useState("");
     let [e2, setE2] = useState("");
-    let { list, setList, online, setOnline, is_error, setIsError, error_text, setErrorText} = useContext(Context);
+    let { list, setList, online, setOnline, is_error, setIsError, error_text, setErrorText } = useContext(Context);
     let chatref = useRef();
     let displayref = useRef();
     let [nullname, setNullname] = useState("");
@@ -31,11 +31,14 @@ function Chat({ adminid }) {
     let [istyping, setIstyping] = useState(false);
     const oldestTimeRef = useRef(null);
     let [pending_users, setPendingusers] = useState(new Set())
+    let [mentioned_users, setMentionedusers] = useState([]);
     let f_ref = useRef();
+    // timer
+    let timer = useRef(null);
 
     let route = process.env.NEXT_PUBLIC_HOMEROUTE
-
-
+    let user_route = process.env.NEXT_PUBLIC_USERROUTE
+    let message_route = process.env.NEXT_PUBLIC_MESSAGEROUTE
 
     useEffect(() => {
         const handler = (username) => {
@@ -51,7 +54,6 @@ function Chat({ adminid }) {
             setMessagelist(prev => [...prev, message_object]);
         }
 
-
         const read_done_update = (data) => {
             let username = data.username;
             if (username != chat_user) {
@@ -66,29 +68,48 @@ function Chat({ adminid }) {
 
         }
 
-        function new_pending_user_handler  (username)  {
-            
-
-                setPendingusers(prev => {
-                    const updated = new Set(prev); // copy the set
-                    updated.add(username);      // add new username to pending list
-                    return updated;               // return new set
-                });
-            
+        function new_pending_user_handler(username) {
 
 
-                
+            setPendingusers(prev => {
+                const updated = new Set(prev); // copy the set
+                updated.add(username);      // add new username to pending list
+
+                return updated;               // return new set
+            });
+
+            // modify list , to move the user name element to first element of list 
+            // Move this user to the HEAD of the list
+            setList(prev => {
+                const index = prev.findIndex(user => user.username === username);
+
+                // User not found
+                if (index === -1) {
+                    return prev;
+                }
+
+                const user = prev[index];
+
+                return [
+                    user,
+                    ...prev.slice(0, index),
+                    ...prev.slice(index + 1)
+                ];
+            });
+
+
+
             if (f_ref.current) {
                 // console.log("performing..")
                 let t = gsap.timeline();
                 t.to(f_ref.current, {
-                    background:"linear-gradient(0deg,rgba(0, 255, 100, 0.5),rgba(0, 0, 0, 0.75))",
+                    background: "linear-gradient(0deg,rgba(0, 255, 100, 0.5),rgba(0, 0, 0, 0.75))",
                     duration: 1,
-                    
+
                 });
 
                 t.to(f_ref.current, {
-                    background:"linear-gradient(180deg,rgba(0, 255, 100, 0.06),rgba(0, 0, 0, 0.75))",
+                    background: "linear-gradient(180deg,rgba(0, 255, 100, 0.06),rgba(0, 0, 0, 0.75))",
                     duration: 1
                 });
             }
@@ -139,7 +160,7 @@ function Chat({ adminid }) {
     useEffect(() => {
         const sendRequest = async () => {
             try {
-                const req = await fetch(`${route}/users/fill`, {
+                const req = await fetch(`${user_route}/fill`, {
                     method: "POST",
                     credentials: "include",
                     headers: { "Content-Type": "application/json" },
@@ -151,11 +172,23 @@ function Chat({ adminid }) {
                 const data = await req.json();
 
                 if (req.ok) {
-                    
-                    setList(data.usernames);
 
+                    const pendingSet = new Set(data.pending_arr);
+
+                    setPendingusers(pendingSet);
+
+                    let pending = [];
+                    let others = [];
+
+                    for (let u of data.usernames) {
+                        if (pendingSet.has(u.username)) {
+                            pending.push(u);
+                        } else {
+                            others.push(u);
+                        }
+                    }
                     
-                    setPendingusers(new Set(data.pending_arr));
+                    setList([...pending, ...others]);
                 }
                 else {
                     setErrorText(`${data.error}` || "Some error occurred");
@@ -219,7 +252,7 @@ function Chat({ adminid }) {
 
     async function send_friend_request(username) {
         try {
-            const res = await fetch(`${route}/users/send`, {
+            const res = await fetch(`${user_route}/send`, {
                 method: "POST",
                 credentials: "include",
                 headers: { "Content-Type": "application/json" },
@@ -255,7 +288,7 @@ function Chat({ adminid }) {
         if (!username) return;
 
         try {
-            const res = await fetch(`${route}/users/add`, {
+            const res = await fetch(`${user_route}/add`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
@@ -294,7 +327,7 @@ function Chat({ adminid }) {
 
     async function nullify() {
         try {
-            let req = await fetch(`${route}/users/remove_friend`, {
+            let req = await fetch(`${user_route}/remove_friend`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
@@ -327,7 +360,7 @@ function Chat({ adminid }) {
     // retrieve messages
     async function get_messages(username, before = null) {
         try {
-            let res = await fetch(`${route}/messages/get_chat`, {
+            let res = await fetch(`${message_route}/get_chat`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
@@ -343,6 +376,7 @@ function Chat({ adminid }) {
                     oldestTimeRef.current = messages[0].time;
                 }
                 // console.log(messages)
+
                 setMessagelist(prev => [...messages, ...prev]);
 
 
@@ -361,11 +395,11 @@ function Chat({ adminid }) {
 
     async function give() {
         try {
-            let res = await fetch(`${route}/messages/give_message`, {
+            let res = await fetch(`${message_route}/give_message`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
-                body: JSON.stringify({ sender: adminid, receiver: chat_user, content: message_text })
+                body: JSON.stringify({ sender: adminid, receiver: chat_user, content: message_text, mention: false })
             })
             let data = await res.json();
             if (res.ok) {
@@ -385,6 +419,36 @@ function Chat({ adminid }) {
             setMessageText("");
         }
     }
+
+
+    async function give_mention_message(username, logScore, badge) {
+        try {
+            console.log(logScore, badge);
+            let res = await fetch(`${message_route}/give_message`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify({ sender: adminid, receiver: chat_user, content: `${username} | ${logScore} | `, badge: badge, mention: true })
+            })
+            let data = await res.json();
+            if (res.ok) {
+                // console.log("message delivered");
+                setMessageText("");
+            } else {
+                setErrorText(`${data.error}` || "Some error occurred");
+                setIsError(true);
+                setMessageText("");
+            }
+            setMessageText("");
+            handle_blinker(1, 0)
+        } catch (err) {
+            setMessageText("");
+            setErrorText("Server error");
+            setIsError(true);
+            setMessageText("");
+            handle_blinker(1, 0)
+        }
+    }
     useEffect(() => {
         if (bottomRef.current && shouldScrollBottom.current) {
             bottomRef.current.scrollIntoView({
@@ -402,7 +466,7 @@ function Chat({ adminid }) {
         let t = gsap.timeline();
 
         if (!stat) {
-            // 🔙 Back to friends list
+            // Back to friends list
 
             t.to(displayref.current, {
                 y: -10,
@@ -455,6 +519,7 @@ function Chat({ adminid }) {
         }
     }
 
+
     function switch_the_mode(val) {
         if (!val) {
             let t = gsap.timeline();
@@ -502,6 +567,56 @@ function Chat({ adminid }) {
         }
     }
 
+    // DEBOUNCING MENTION FEATURE
+    async function handle_mention_change(message) {
+        // this all will happen only if username starts with @
+        if (chat_user.length > 0) {
+
+            if (message[0] === "@" && message.length >= 2) {
+
+                // clear previous timer
+
+                clearTimeout(timer.current);
+                timer.current = setTimeout(async () => {
+                    let suitable_prefix = message.slice(1);
+
+                    // call the request here
+                    try {
+
+                        let res = await fetch(`${user_route}/mention/${suitable_prefix}`, {
+                            method: "GET",
+                            headers: { "Content-Type": "application/json" },
+                            credentials: "include",
+                        })
+                        let data = await res.json();
+                        if (data.ok) {
+
+                            // set the diplay mention array here
+                            setMentionedusers(data.users);
+
+                        } else {
+                            setErrorText(data.error);
+                            setIsError(true);
+
+                        }
+                    } catch (err) {
+                        setMentionedusers([]);
+                        setErrorText("Server error");
+                        setIsError(true);
+                    }
+
+                }
+                    , 300)
+            } else if (message.length <= 1) {
+                clearTimeout(timer.current);
+                setMentionedusers([]);
+                console.log("cleared timeout, no request will be sent")
+            } else {
+                setMentionedusers([]);
+
+            }
+        }
+    }
 
 
     function handle_blinker(prev, curr) {
@@ -561,7 +676,7 @@ function Chat({ adminid }) {
         } catch (arr) {
             setErrorText("Something went wrong");
             setIsError(true);
-            
+
         }
     }
 
@@ -577,20 +692,20 @@ function Chat({ adminid }) {
         let id = `#friend_badge${index}`
         let t = gsap.timeline();
         t.to(id, {
-            delay:-0.2,
-            opacity:1,
-            duration:0.3
+            delay: -0.2,
+            opacity: 1,
+            duration: 0.3
         })
-        
+
     }
     function disappear_badge(index) {
         let id = `#friend_badge${index}`
         let t = gsap.timeline();
-        
+
         t.to(id, {
-            duration:0.3,
-            delay:-0.2,
-            opacity:0
+            duration: 0.3,
+            delay: -0.2,
+            opacity: 0
         })
     }
 
@@ -647,12 +762,12 @@ function Chat({ adminid }) {
                                         </div>
                                         {online.has(user.username) && <div className="isonline"></div>}
                                         {pending_users.has(user.username) && <div className="ispending"></div>}
-                                        <p onMouseOver={()=>{
+                                        <p onMouseOver={() => {
                                             appear_badge(index);
                                         }}
-                                        onMouseLeave={()=>{
-                                            disappear_badge(index);
-                                        }}
+                                            onMouseLeave={() => {
+                                                disappear_badge(index);
+                                            }}
                                         >{user.username}</p>
                                         <div>
                                             <div className="chat_with_friend" onClick={() => {
@@ -772,38 +887,88 @@ function Chat({ adminid }) {
 
                         cut_direct_link();
                     }}>terminate link</div>}
+
+
+
+
                     <div id="cross_chat" onScroll={handle_scroll}>
-                        {chat_user && messagelist.map((msg, index) => (
-                            msg.isAdmin ? (
-                                <div className="sender_message" key={index}>
+                        {chat_user && messagelist.map((msg, index) => {
+                            if (msg.isAdmin && !msg.mention) {
+                                return (
+                                    <div className="sender_message" key={index}>
                                     <p className="sender_message_content">{msg.text}
                                         <span className="message_time">{formatDateTime(msg.time)}</span>
                                     </p>
 
                                 </div>
-                            ) : (
-                                <div className="receiver_message" key={index}>
-                                    <p className="receiver_message_content">{msg.text}</p>
-                                    <span className="receiver_message_time">{formatDateTime(msg.time)}</span>
-                                </div>
-                            )
-                        ))}
+                                )
+                            } else if (msg.isAdmin && msg.mention) {
+                                return (
+                                    <div className="sender_message" key={index}>
+                                        <div className={`mention_message_${msg.badge}`}>{msg.text}<span><img src={`/${msg.badge}.png`} className="mention_badge"></img></span></div>
+                                    
+                                    </div>
+                                )
+                            } else if (!msg.isAdmin && !msg.mention) {
+                                return (
+                                    <div className="receiver_message" key={index}>
+                                        <p className="receiver_message_content">{msg.text}</p>
+                                        <span className="receiver_message_time">{formatDateTime(msg.time)}</span>
+                                    </div>
+                                )
+                            } else if (!msg.isAdmin && msg.mention) {
+                                return (
+                                    <div className="receiver_message" key={index}>
+                                        <div className={`mention_message_${msg.badge}`}>{msg.text}<span><img src={`/${msg.badge}.png`} className="mention_badge"></img></span></div>
+                                    
+                                    </div>
+                                )   
+                            }
+                            
+                        })
+                        
+                        }
+                        {/* <div className="sender_message">
+                            <div className="mention_message"> Raghu Pratap Singh | {2.26} | <span><img src={`/kernel.png`} className="mention_badge"></img></span></div>
+                        
+                        </div> */}
+
+
                         <div ref={bottomRef}></div>
                     </div>
+
+
+
+                    
                     <form id="message_form" onSubmit={(e) => {
                         e.preventDefault()
                     }}>
+
                         {istyping && <div id="typing">
                             <div className="load_box"></div>
                             <div className="load_box"></div>
                             <div className="load_box"></div>
                             <div className="load_box"></div>
                         </div>}
+                        <div id="mention_them">
+                            {mentioned_users.map((user, index) => (
+                                <li key={index} onClick={() => {
+                                    give_mention_message(user.username, user.logScore, user.level);
+                                    inputref.current.value = "";
+                                    setMentionedusers([]);
+                                }}> {user.username} | {user.logScore} | <span><img src={`/${user.level}.png`} className="mention_badge"></img></span></li>
+                                // <div className="mention_message" key={index}> {user.username} | {user.logScore} | <span><img src={`/${user.level}.png`} className="mention_badge"></img></span></div>
+
+                            ))}
+
+                        </div>
                         <input id="message" placeholder="Send a message..." onChange={(e) => {
                             handle_blinker(message_text.length, e.target.value.length)
                             setMessageText(e.target.value);
-
+                            handle_mention_change(e.target.value);
                         }} ref={inputref}></input>
+
+
                         <div id="send" onClick={() => {
 
                             if (message_text.length > 0) {

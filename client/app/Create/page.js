@@ -21,6 +21,7 @@ function Create() {
   let [password, setPassword] = useState("");
 
   const route = process.env.NEXT_PUBLIC_HOMEROUTE;
+  let user_route = process.env.NEXT_PUBLIC_USERROUTE
   useEffect(() => {
     if (welcomeref.current) {
       gsap.to("#welcome h2", {
@@ -68,7 +69,7 @@ function Create() {
         return;
       }
 
-      let otp_req = await fetch(`${route}/users/genotp`, {
+      let otp_req = await fetch(`${user_route}/genotp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -107,7 +108,7 @@ function Create() {
         setIsError(true);
         return;
       }
-      let match_req = await fetch(`${route}/users/matchotp`, {
+      let match_req = await fetch(`${user_route}/matchotp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -117,7 +118,7 @@ function Create() {
       let data = await match_req.json();
       if (data.ok) {
         // otp matched, now register this user
-        const res = await fetch(`${route}/users/register`, {
+        const res = await fetch(`${user_route}/register`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",

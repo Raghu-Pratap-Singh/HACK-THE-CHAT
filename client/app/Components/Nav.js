@@ -139,7 +139,7 @@ function Nav({ adminid }) {
 
     async function onAccept(username) {
         try {
-            let request = await fetch(`${route}/users/accept_friend`, {
+            let request = await fetch(`${user_route}/accept_friend`, {
                 method: "POST",
                 credentials: "include",
                 headers: { "Content-Type": "application/json" },
@@ -173,7 +173,7 @@ function Nav({ adminid }) {
 
     async function onDecline(username) {
         try {
-            let request = await fetch(`${route}/users/decline_friend`, {
+            let request = await fetch(`${user_route}/decline_friend`, {
                 method: "POST",
                 credentials: "include",
                 headers: { "Content-Type": "application/json" },
@@ -204,7 +204,7 @@ function Nav({ adminid }) {
 
     async function logout() {
         try {
-            let res = await fetch(`${route}/users/logout/`, {
+            let res = await fetch(`${user_route}/logout/`, {
                 method: "POST",
                 credentials: "include",
                 headers: { "Content-Type": "application/json" }

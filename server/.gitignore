@@ -23,3 +23,6 @@ utils/logScore.js
 utils/linkStrength.js
 
 loadtest/
+
+.dockerignore
+Dockerfile

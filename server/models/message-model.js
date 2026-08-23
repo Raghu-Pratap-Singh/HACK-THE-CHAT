@@ -22,6 +22,10 @@ const messageSchema = new mongoose.Schema(
     image_content: {
       type: String,
       default: ""
+    },
+    mention: {
+      type: Boolean,
+      default: false
     }
   },
   { timestamps: true }

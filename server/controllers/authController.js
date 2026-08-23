@@ -85,7 +85,9 @@ const gen_OTP = async (req, res) => {
 
     if (response.success === false) {
       // some error occured
+
       return res.status(400).json({error : "Some Error Occured"});
+
     }
     // No error, otp sent successfully
     // store temporarily in database
@@ -105,11 +107,13 @@ const matcher = async (req, res) => {
     let { otp, email } = req.body;
     if (!otp) {
       return res.status(400).json({error : "bad request"});
+      await otpModel.deleteOne({email : email});
     }
     // match otp with that in db to this email
     let otp_object = await otpModel.findOne({ email : email });
     if (!otp_object) {
       return res.status(404).json({ error : "Server error" });
+      await otpModel.deleteOne({email : email});
     }
     if (otp_object.temp_otp === Number(otp)) {
       // otp matched,
@@ -119,9 +123,11 @@ const matcher = async (req, res) => {
       return res.status(200).json({ok : true});
     }
     else {
+      await otpModel.deleteOne({email : email});
       return res.status(500).json({error : "Invalid OTP"});
     }
   } catch (err) {
+    await otpModel.deleteOne({email : email});
     return res.status(500).json({error : "Server error"});
   }
 }

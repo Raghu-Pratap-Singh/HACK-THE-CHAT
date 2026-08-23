@@ -41,7 +41,9 @@ async function get_chat(req, res) {
             let object = {
                 time: element.createdAt,
                 isAdmin: false,
-                text: element.text_content
+                text: element.text_content,
+                badge: element.image_content,
+                mention: element.mention
             }
             merged.push(object);
         }
@@ -50,14 +52,15 @@ async function get_chat(req, res) {
             let object = {
                 time: element.createdAt,
                 isAdmin: true,
-                text: element.text_content
+                text: element.text_content,
+                badge: element.image_content,
+                mention: element.mention
             }
             merged.push(object);
         }
         merged.sort((a, b) => new Date(a.time) - new Date(b.time));
         // select latest 20
         const slice = merged.slice(-20);
-
         return res.status(200).json({ ok: true, messages: slice });
 
     } catch (err) {
@@ -68,12 +71,18 @@ async function get_chat(req, res) {
 
 async function give(req, res) {
     try {
-        let { sender, receiver, content } = req.body;
+        let { sender, receiver, content, mention} = req.body;
         if (!sender) {
             return res.status(404).json({ error: "sender not found" });
         }
         if (!receiver) {
             return res.status(404).json({ error: "receiver not found" });
+        }
+        let Badge = "";
+        if (mention) {
+
+            let { badge } = req.body;
+            Badge = badge;
         }
         let [user, admin] = await Promise.all([
             userModel.findOne({ username: receiver }),
@@ -105,7 +114,8 @@ async function give(req, res) {
             sender: admin._id,
             receiver: user._id,
             text_content: content,
-            image_content: ""
+            image_content: Badge,
+            mention: mention
         })
 
         await Promise.all([
@@ -122,12 +132,16 @@ async function give(req, res) {
         let object1 = {
             time: message.createdAt,
             isAdmin: true,
-            text: message.text_content
+            text: message.text_content,
+            mention: mention,
+            badge: Badge
         }
         let object2 = {
             time: message.createdAt,
             isAdmin: false,
-            text: message.text_content
+            text: message.text_content,
+            mention: mention,
+            badge: Badge
         }
 
         // get last message between this pair

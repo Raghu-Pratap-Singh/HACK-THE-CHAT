@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {registerUser, loginUser, logout, gen_OTP, matcher}= require('../controllers/authController');
 const { isLoggedIn } = require('../middlewares/isLoggedIn');
-const { search_friend , add_friend, get_friend_requests, accept, decline, fill, remove_friend} = require("../controllers/userController");
+const { search_friend , add_friend, get_friend_requests, accept, decline, fill, remove_friend, get_mentioned_users} = require("../controllers/userController");
 
 // Public routes
 router.post("/register", registerUser)
@@ -19,6 +19,7 @@ router.post("/accept_friend", isLoggedIn, accept)
 router.post("/decline_friend", isLoggedIn, decline)
 router.post("/fill", isLoggedIn, fill)
 router.post("/remove_friend", isLoggedIn, remove_friend);
+router.get("/mention/:username", isLoggedIn, get_mentioned_users);
 router.get("/me", isLoggedIn, (req, res) => {
   res.status(200).json({ user: req.user });
 });
